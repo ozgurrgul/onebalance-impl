@@ -1,6 +1,7 @@
 import express from "express";
 import { z } from "zod";
 import { getBalances, isValidAddress } from "./balanceService";
+import { withCache } from "./cacheUtils";
 
 const app = express();
 const port = 3000;
@@ -14,7 +15,11 @@ const addressSchema = z.string().refine(isValidAddress, {
 app.get("/api/balance", async (req, res) => {
   try {
     const address = addressSchema.parse(req.query.address);
-    res.json({ balances: await getBalances(address) });
+    const balances = await withCache(
+      address,
+      async () => await getBalances(address)
+    );
+    res.json({ balances });
   } catch (e) {
     if (e instanceof z.ZodError) {
       res.status(400).json({
