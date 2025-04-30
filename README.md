@@ -26,3 +26,4 @@ npm run dev
 - Caching busting should be added, or can be automatic cache clean up such as keep only 1000 cached items in the memory
 - For frontend, side effects such as API calls should be handled via react-query or redux-saga. Redux-saga is way better for large projects since it makes business logic orchestration a breeze. I didn't use for the sake of this exercise.
 - For UI, any component library can be used. Shadcn is easy choice but for this I just used TailwindCss CDN to keep simple.
+- Eslint rules, prettier config, git hooks such as pre-push should be added for more consistent codebase
