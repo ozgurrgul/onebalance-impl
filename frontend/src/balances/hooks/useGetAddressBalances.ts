@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { fetchBalances } from "../balances/balanceSideEffects";
-import { Balances } from "../balances/balanceTypes";
+import { Balances } from "../balanceTypes";
+import { fetchBalances } from "../balanceSideEffects";
 
 // Ideally we should use react-query since it handles caching, error handling, etc.
 export const useGetAddressBalances = () => {

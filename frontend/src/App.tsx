@@ -1,11 +1,10 @@
 import { useState } from "react";
 import "./App.css";
-import { fetchBalances } from "./balances/balanceSideEffects";
-import { Balances } from "./balances/balanceTypes";
 import { formatBalance } from "./balances/balanceUtils";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
-import { useGetAddressBalances } from "./hooks/useGetAddressBalances";
+import { useGetAddressBalances } from "./balances/hooks/useGetAddressBalances";
+
 function App() {
   const [address, setAddress] = useState("");
   const { balances, error, isLoading, getBalances } = useGetAddressBalances();
