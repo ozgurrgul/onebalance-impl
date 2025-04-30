@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/node": "^22.15.3",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
@@ -19,6 +20,7 @@
   },
   "dependencies": {
     "@types/express": "^5.0.1",
+    "cors": "^2.8.5",
     "ethers": "^6.13.7",
     "express": "^5.1.0",
     "zod": "^3.24.3"

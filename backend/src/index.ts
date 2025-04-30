@@ -2,11 +2,13 @@ import express from "express";
 import { z } from "zod";
 import { getBalances, isValidAddress } from "./balanceService";
 import { withCache } from "./cacheUtils";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 const addressSchema = z.string().refine(isValidAddress, {
   message: "Invalid Ethereum address",
