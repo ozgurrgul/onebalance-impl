@@ -1,6 +1,6 @@
 import express from "express";
 import { z } from "zod";
-import { isValidAddress } from "./balanceService";
+import { getBalances, isValidAddress } from "./balanceService";
 
 const app = express();
 const port = 3000;
@@ -11,10 +11,10 @@ const addressSchema = z.string().refine(isValidAddress, {
   message: "Invalid Ethereum address",
 });
 
-app.get("/api/balance", (req, res) => {
+app.get("/api/balance", async (req, res) => {
   try {
     const address = addressSchema.parse(req.query.address);
-    res.json({ message: "Hello, world!", address });
+    res.json({ balance: await getBalances(address) });
   } catch (e) {
     if (e instanceof z.ZodError) {
       res.status(400).json({
