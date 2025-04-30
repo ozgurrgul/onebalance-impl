@@ -5,36 +5,31 @@ import { Balances } from "./balances/balanceTypes";
 import { formatBalance } from "./balances/balanceUtils";
 import { Input } from "./ui/Input";
 import { Button } from "./ui/Button";
-
+import { useGetAddressBalances } from "./hooks/useGetAddressBalances";
 function App() {
   const [address, setAddress] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [balances, setBalances] = useState<Balances>();
+  const { balances, error, isLoading, getBalances } = useGetAddressBalances();
 
   const handleSearch = async () => {
     if (!address) {
       return;
     }
-    // Ideally we should use react-query since it handles caching, error handling, etc.
-    try {
-      setIsLoading(true);
-      const balances = await fetchBalances(address);
-      setBalances(balances);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
+    await getBalances(address);
   };
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-12">
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
             <span className="block">Search for an</span>
             <span className="block text-blue-600">Ethereum Address</span>
           </h1>
+          {error && (
+            <div className="mt-8 max-w-xl mx-auto">
+              <p className="text-red-500">{error}</p>
+            </div>
+          )}
           <div className="mt-8 max-w-xl mx-auto">
             <div className="flex gap-2">
               <Input value={address} onChange={setAddress} />
