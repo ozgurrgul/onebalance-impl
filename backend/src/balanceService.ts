@@ -42,19 +42,33 @@ const getBalanceFromSymbol = async (
 };
 
 export const getBalances = async (address: string) => {
-  const supportedsymbols = ["ETH", ...Object.keys(TOKEN_CONTRACTS)];
-  const balances = await Promise.all(
-    supportedsymbols.map(async (symbol) =>
-      getBalanceFromSymbol(address, symbol as SupportedSymbol)
-    )
-  );
+  const supportedSymbols = ["ETH", ...Object.keys(TOKEN_CONTRACTS)];
+  const balancePromises = supportedSymbols.map(async (symbol) => {
+    try {
+      return await getBalanceFromSymbol(address, symbol as SupportedSymbol);
+    } catch (error) {
+      console.error(
+        `Error fetching balance for ${address} on ${symbol}:`,
+        error
+      );
+      return null;
+    }
+  });
 
-  return balances
-    .filter((balance) => !!balance)
-    .map(({ symbol, balance }) => {
-      return {
-        symbol,
-        balance: ethers.formatUnits(balance, DECIMALS[symbol]),
-      };
-    });
+  const balances = await Promise.all(balancePromises);
+  const validBalances = balances
+    .filter(
+      (balance): balance is Awaited<ReturnType<typeof getBalanceFromSymbol>> =>
+        balance !== null && balance.balance !== undefined
+    )
+    .map(({ symbol, balance }) => ({
+      symbol,
+      balance: ethers.formatUnits(balance, DECIMALS[symbol]),
+    }));
+
+  if (validBalances.length === 0) {
+    throw new Error("No valid balances found for the given address");
+  }
+
+  return validBalances;
 };
