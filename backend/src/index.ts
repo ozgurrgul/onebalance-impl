@@ -14,7 +14,7 @@ const addressSchema = z.string().refine(isValidAddress, {
 app.get("/api/balance", async (req, res) => {
   try {
     const address = addressSchema.parse(req.query.address);
-    res.json({ balance: await getBalances(address) });
+    res.json({ balances: await getBalances(address) });
   } catch (e) {
     if (e instanceof z.ZodError) {
       res.status(400).json({
