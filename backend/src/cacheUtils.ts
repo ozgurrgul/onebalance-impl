@@ -23,5 +23,3 @@ export const withCache = async (
 
   return result;
 };
-
-// purgeCache function to clear the cache, for prod
